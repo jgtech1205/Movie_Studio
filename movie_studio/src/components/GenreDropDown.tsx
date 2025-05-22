@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -6,19 +6,35 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-  } from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
+import Link from "next/link"; // Import Link from next/link
 
-  import { ChevronDown } from "lucide-react";
+const genreArray = [
+    { id: 101, name: "Action" },
+    { id: 102, name: "Animation" }
+];
 
-  const GenreDropDown = () => {
+const GenreDropDown = () => {
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger className="text-white flex items-center text-sm font-medium">
-          Genre <ChevronDown className= "ml-1" size={20}/>
-        </DropdownMenuTrigger>
-      </DropdownMenu>
+        <DropdownMenu>
+            <DropdownMenuTrigger className="text-white flex items-center text-sm font-medium">
+                Genre <ChevronDown className="ml-1" size={20} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuLabel>Select a Genre</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {genreArray.map((item) => (
+                    <DropdownMenuItem key={item.id}>
+                        <Link href={`/genre/${item?.id}?genre=${item.name}`}>
+                            {item?.name}
+                            </Link>
+
+                    </DropdownMenuItem>
+                ))}
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
-  };
-  
-  export default GenreDropDown;
-  
+};
+
+export default GenreDropDown;
