@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import GenreDropDown from "./GenreDropDown";
+import SearchInput from "./SearchInput";
 
 const Header = () => {
     return (
@@ -18,10 +19,11 @@ const Header = () => {
         </Link>
   
         {/* Others */}
-        <div className= "text-white">
+        <div className= "text-white flex space-x-2 items-center">
           {/* Genre */}
           <GenreDropDown />
           {/* Search */}
+          <SearchInput />
           {/* Theme */}
         </div>
       </div>
