@@ -1,18 +1,23 @@
 "use client";
+
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem } from "./ui/form";
-import { useRouter } from "next/navigation";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-//import { Input } from "@/components/ui/input";
+import { z } from "zod";
+import { useRouter } from "next/navigation";
+
+import { Form, FormField, FormItem, FormControl } from "./ui/form";
+import { Input } from "./ui/input";
 
 const formSchema = z.object({
   input: z.string().min(2).max(30),
 });
 
+type FormSchema = z.infer<typeof formSchema>;
+
 const SearchInput = () => {
   const router = useRouter();
-  const form = useForm<z.infer<typeof formSchema>>({
+
+  const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       input: "",
@@ -24,11 +29,13 @@ const SearchInput = () => {
     form.reset();
   };
 
+  
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="text-black space-y-1"
+        className="text-white space-y-1"
       >
         <FormField
           control={form.control}
