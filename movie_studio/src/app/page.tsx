@@ -4,7 +4,7 @@ import {
   getPopularMovies,
   getUpcomingMovies, 
 } from "@/lib/getMovies";
-
+import CaroselBanner from "@/components/CaroselBanner";
 export default async function Home() {
   const nowPlayingMovies = await getNowPlayingMovies();
   const upcomingMovies = await getUpcomingMovies();
@@ -13,7 +13,7 @@ export default async function Home() {
 
   return (
     <main>
-      <p>Movie studio for YouTube</p>
+      <CaroselBanner />
     </main>
   );
 }
