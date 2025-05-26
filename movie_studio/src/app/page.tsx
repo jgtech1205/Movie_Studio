@@ -1,9 +1,19 @@
-import Image from "next/image";
+import {
+  getNowPlayingMovies,
+  getTopRatedMovies,
+  getPopularMovies,
+  getUpcomingMovies, 
+} from "@/lib/getMovies";
 
-export default function Home() {
+export default async function Home() {
+  const nowPlayingMovies = await getNowPlayingMovies();
+  const upcomingMovies = await getUpcomingMovies();
+  const topRatedMovies = await getTopRatedMovies();
+  const popularMovies = await getPopularMovies();
+
   return (
     <main>
-      <p>Movie studio for youtube</p>
+      <p>Movie studio for YouTube</p>
     </main>
   );
 }
