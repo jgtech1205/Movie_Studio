@@ -68,6 +68,14 @@ export const getDiscoverMovies = async (id?: string, keywords?: string) => {
   return data.results;
 };
 
+// Get Movies by Genre
+export const getMoviesByGenre = async (genreId: string) => {
+  const url = new URL("https://api.themoviedb.org/3/discover/movie");
+  url.searchParams.set("with_genres", genreId);
+  const data = await fetcher(url);
+  return data.results; // Return the list of movies for the specified genre
+};
+
 // Search
 export const getSearchedMovies = async (term: string) => {
   const url = new URL("https://api.themoviedb.org/3/search/movie");

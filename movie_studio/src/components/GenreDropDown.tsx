@@ -1,51 +1,73 @@
-import React from 'react';
+"use client";
+
+import { useEffect, useState } from "react";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
-import { Genres } from '../../type';
+import { Genres } from "../../type";
 
-const GenreDropDown = async () => {
-    const url = "https://api.themoviedb.org/3/genre/movie/list?language=en";
-    const options: RequestInit = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${process.env.TMDB_READ_ACCESS_KEY}`,
-        },
-        next: {
-          revalidate: 60 * 60 * 24,
-        },
-      };
+const GenreDropDown = () => {
+  const [genres, setGenres] = useState<Genres["genres"]>([]);
+  const [loading, setLoading] = useState(true);
 
-      const response = await fetch(url, options);
-      const data = await response.json() as Genres;
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const response = await fetch(
+          "https://api.themoviedb.org/3/genre/movie/list?language=en",
+          {
+            method: "GET",
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_READ_ACCESS_KEY}`,
+            },
+          }
+        );
 
-          return (
-        <DropdownMenu>
-            <DropdownMenuTrigger className="text-white flex items-center text-sm font-medium">
-                Genre <ChevronDown className="ml-1" size={20} />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuLabel>Select a Genre</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {data?.genres?.map((genre) => (
-                    <DropdownMenuItem key={genre.id}>
-                        <Link href={`/genre/${genre?.id}?genre=${genre.name}`}>
-                            {genre?.name}
-                            </Link>
+        const data = (await response.json()) as Genres;
+        setGenres(data.genres ?? []);
+      } catch (error) {
+        console.error("Failed to fetch genres:", error);
+        setGenres([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-                    </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-        </DropdownMenu>
-    );
+    fetchGenres();
+  }, []);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="text-white flex items-center text-sm font-medium">
+        Genre <ChevronDown className="ml-1" size={20} />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>
+          {loading ? "Loading genres..." : "Select a Genre"}
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {genres.length > 0 ? (
+          genres.map((genre) => (
+            <DropdownMenuItem key={genre.id}>
+              <Link href={`/genre/${genre.id}?genre=${genre.name}`}>
+                {genre.name}
+              </Link>
+            </DropdownMenuItem>
+          ))
+        ) : (
+          <DropdownMenuItem disabled>No genres found</DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 };
 
 export default GenreDropDown;
